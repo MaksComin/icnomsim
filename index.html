@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Simulation Tool</title>
+</head>
+<body>
+    <!-- Financial Simulation Tool - Self-Contained -->
+    <div class="financial-tool-container">
+        <div class="financial-tool-wrapper">
+            <!-- Left side text content - Hidden when showing results -->
+            <div class="financial-tool-text" id="formTextContent">
+                <h2>Estimez votre revenu net avec INCOM</h2>
+                <p>Indiquez votre chiffre d'affaires et vos frais pro pour estimer votre salaire net avec INCOM</p>
+                
+                <!-- INCOM Info Box -->
+                <div class="incom-info-box" id="incomInfoBox">
+                    <div class="incom-info-header" id="incomInfoHeader">
+                        <span class="incom-info-title">📊 En moyenne, les chauffeurs INCOM gagnent 500 € de plus par mois</span>
+                        <span class="incom-info-arrow" id="incomInfoArrow">▼</span>
+                    </div>
+                    <div class="incom-info-content" id="incomInfoContent">
+                        <p>Chez INCOM, vous êtes salarié tout en gardant votre liberté. Moins d'impôts, plus de protections sociales, un bulletin de paie chaque mois… et fini la paperasse.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right side form -->
+            <div class="financial-tool-form">
+                <!-- Form Section -->
+                <div id="formSection">
+                    <form id="financialForm">
+                        <div class="ft-form-content">
+                            <!-- Chiffre d'affaires -->
+                            <div class="ft-form-group">
+                                <label for="ft-turnover" class="ft-form-label">Chiffre d'affaires mensuel net TTC</label>
+                                <div class="ft-currency-input-wrapper">
+                                    <input 
+                                        type="text" 
+                                        id="ft-turnover" 
+                                        name="turnover"
+                                        class="ft-form-input ft-currency-input" 
+                                        placeholder="5 000"
+                                        inputmode="numeric"
+                                    >
+                                    <span class="ft-currency-symbol">€</span>
+                                </div>
+                                <div class="ft-error-message" id="ft-turnover-error"></div>
+                            </div>
+
+                            <!-- Titularité du véhicule -->
+                            <div class="ft-form-group">
+                                <label for="ft-ownership" class="ft-form-label">Titularité du véhicule</label>
+                                <div class="ft-custom-dropdown" id="ft-ownership-dropdown">
+                                    <div class="ft-dropdown-selected" id="ft-ownership-selected">
+                                        <span class="ft-dropdown-placeholder">Sélectionnez une option</span>
+                                        <span class="ft-dropdown-arrow">▼</span>
+                                    </div>
+                                    <div class="ft-dropdown-options" id="ft-ownership-options">
+                                        <div class="ft-dropdown-option" data-value="owner">Propriétaire</div>
+                                        <div class="ft-dropdown-option" data-value="credit">Crédit véhicule (financement)</div>
+                                        <div class="ft-dropdown-option" data-value="leasing">Leasing / Location longue durée</div>
+                                    </div>
+                                    <input type="hidden" id="ft-ownership" name="ownership" value="">
+                                </div>
+                                <div class="ft-error-message" id="ft-ownership-error"></div>
+                            </div>
+
+                            <!-- Montant mensuel crédit/leasing (conditional) -->
+                            <div class="ft-form-group" id="ft-payment-group" style="display: none;">
+                                <label for="ft-monthly-payment" class="ft-form-label" id="ft-payment-label">Montant mensuel</label>
+                                <div class="ft-currency-input-wrapper">
+                                    <input 
+                                        type="text" 
+                                        id="ft-monthly-payment" 
+                                        name="monthlyPayment"
+                                        class="ft-form-input ft-currency-input"
+                                        placeholder="400"
+                                        inputmode="numeric"
+                                    >
+                                    <span class="ft-currency-symbol">€</span>
+                                </div>
+                                <div class="ft-error-message" id="ft-monthly-payment-error"></div>
+                            </div>
+
+                            <!-- Frais professionnels -->
+                            <div class="ft-form-group">
+                                <label for="ft-expenses" class="ft-form-label">
+                                    Montant des frais professionnels mensuels
+                                </label>
+                                <div class="ft-currency-input-wrapper">
+                                    <input 
+                                        type="text" 
+                                        id="ft-expenses" 
+                                        name="expenses"
+                                        class="ft-form-input ft-currency-input"
+                                        placeholder="1 500"
+                                        inputmode="numeric"
+                                    >
+                                    <span class="ft-currency-symbol">€</span>
+                                </div>
+                                <div class="ft-error-message" id="ft-expenses-error"></div>
+                            </div>
+
+                            <!-- Type de véhicule -->
+                            <div class="ft-form-group ft-vehicle-group">
+                                <label class="ft-form-label">Type de véhicule</label>
+                                <div class="ft-vehicle-options">
+                                    <div class="ft-vehicle-option ft-selected" data-value="hybride">
+                                        <img src="https://cdn.prod.website-files.com/6889fc5ff91302573d0cb517/688b40edae7fb206bff89c6c_voiture-hyrbide.png" alt="Véhicule hybride">
+                                        <span>Hybride</span>
+                                    </div>
+                                    <div class="ft-vehicle-option" data-value="electrique">
+                                        <img src="https://cdn.prod.website-files.com/6889fc5ff91302573d0cb517/688b40f003525dd9a78d5213_voiture-electrique.png" alt="Véhicule électrique">
+                                        <span>Électrique</span>
+                                    </div>
+                                    <div class="ft-vehicle-option" data-value="thermique">
+                                        <img src="https://cdn.prod.website-files.com/6889fc5ff91302573d0cb517/688b40ed2c03311f74178439_voiture-thermique.png" alt="Véhicule thermique">
+                                        <span>Thermique</span>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="ft-vehicleType" name="vehicleType" value="hybride">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="ft-form-group">
+                                <label for="ft-email" class="ft-form-label">Email</label>
+                                <input 
+                                    type="email" 
+                                    id="ft-email" 
+                                    name="email"
+                                    class="ft-form-input"
+                                    placeholder="votre@email.com"
+                                >
+                                <div class="ft-error-message" id="ft-email-error"></div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="ft-button-group">
+                                <button type="button" class="ft-btn ft-btn-primary" id="ft-resultBtn">Calculer</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div id="resultsSection" style="display: none;">
+                    <!-- Top comparison cards -->
+                    <div class="ft-comparison-cards">
+                        <!-- INCOM Card (highlighted) -->
+                        <div class="ft-comparison-card ft-incom-card">
+                            <h4 class="ft-card-title">Salaire Net avec INCOM</h4>
+                            <div class="ft-card-amount" id="result-incom-amount">-</div>
+                            <div class="ft-card-percentage" id="result-incom-percentage">-</div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed breakdown section -->
+                    <div class="ft-salary-breakdown">
+
+                        <!-- Salary components list -->
+                        <div class="ft-salary-components">
+                            <!-- Salaire Net Avant Impôts -->
+                            <div class="ft-component-item">
+                                <div class="ft-component-left">
+                                    <span class="ft-component-icon">💰</span>
+                                    <span class="ft-component-label">Salaire net avant impôts</span>
+                                </div>
+                                <div class="ft-component-dots"></div>
+                                <div class="ft-component-right">
+                                    <span class="ft-component-amount" id="component-salaire-net">- €</span>
+                                    <span class="ft-component-monthly">(<span id="component-salaire-net-monthly">-</span> / mois)</span>
+                                </div>
+                            </div>
+
+                            <!-- Indemnités kilométriques -->
+                            <div class="ft-component-item">
+                                <div class="ft-component-left">
+                                    <span class="ft-component-icon">🚗</span>
+                                    <span class="ft-component-label">Indemnités kilométriques</span>
+                                </div>
+                                <div class="ft-component-dots"></div>
+                                <div class="ft-component-right">
+                                    <span class="ft-component-amount" id="component-indemnites-km">- €</span>
+                                    <span class="ft-component-monthly">(<span id="component-indemnites-km-monthly">-</span> / mois)</span>
+                                </div>
+                            </div>
+
+                            <!-- Indemnités repas -->
+                            <div class="ft-component-item">
+                                <div class="ft-component-left">
+                                    <span class="ft-component-icon">🍽️</span>
+                                    <span class="ft-component-label">Indemnités repas</span>
+                                </div>
+                                <div class="ft-component-dots"></div>
+                                <div class="ft-component-right">
+                                    <span class="ft-component-amount" id="component-indemnites-repas">- €</span>
+                                    <span class="ft-component-monthly">(<span id="component-indemnites-repas-monthly">-</span> / mois)</span>
+                                </div>
+                            </div>
+
+                            <!-- Indemnités Congés Payés -->
+                            <div class="ft-component-item">
+                                <div class="ft-component-left">
+                                    <span class="ft-component-icon">🏖️</span>
+                                    <span class="ft-component-label">Indemnités Congés Payés</span>
+                                </div>
+                                <div class="ft-component-dots"></div>
+                                <div class="ft-component-right">
+                                    <span class="ft-component-amount" id="component-conges-payes">- €</span>
+                                    <span class="ft-component-monthly">(<span id="component-conges-payes-monthly">-</span> / mois)</span>
+                                </div>
+                            </div>
+
+                            <!-- Indemnités Rupture Conventionnelle -->
+                            <div class="ft-component-item">
+                                <div class="ft-component-left">
+                                    <span class="ft-component-icon">🤝</span>
+                                    <span class="ft-component-label">Provision de fin de contrat (PFC)</span>
+                                </div>
+                                <div class="ft-component-dots"></div>
+                                <div class="ft-component-right">
+                                    <span class="ft-component-amount" id="component-rupture-conventionnelle">- €</span>
+                                    <span class="ft-component-monthly">(<span id="component-rupture-conventionnelle-monthly">-</span> / mois)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="ft-results-actions">
+                        <button type="button" class="ft-btn ft-btn-primary" id="ft-restartBtn">Nouvelle simulation</button>
+                        <button type="button" class="ft-btn ft-btn-outline" id="ft-downloadBtn">Télécharger en PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
